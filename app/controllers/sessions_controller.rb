@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  before_filter :already_login, :only => [:new, :create]
+
   def new
   end
 
@@ -17,4 +19,10 @@ class SessionsController < ApplicationController
     sign_out
     redirect_to root_url
   end
+
+  private
+
+    def already_login
+      redirect_to root_url, :notice => "Already login." if signed_in?
+    end
 end
