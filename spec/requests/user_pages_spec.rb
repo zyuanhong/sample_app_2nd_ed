@@ -37,6 +37,7 @@ describe "User pages" do
       describe "as an admin user" do
         let(:admin) { FactoryGirl.create(:admin) }
         before do
+          click_link "Sign out"
           sign_in admin
           visit users_path
         end
@@ -46,6 +47,12 @@ describe "User pages" do
           expect { click_link('delete') }.to change(User, :count).by(-1)
         end
         it { should_not have_link('delete', :href => user_path(admin)) }
+
+        describe "can't destroy admin" do
+          before { delete user_path(admin) }
+          specify { response.should redirect_to(users_path),
+                    flash[:error].should =~ /Suicide is immoral!/i }
+        end
       end
     end
   end
@@ -86,10 +93,10 @@ describe "User pages" do
 
     describe "with valid information" do
       before do
-        fill_in "Name",         :with => "Example User"
-        fill_in "Email",        :with => "user@example.com"
-        fill_in "Password",     :with => "foobar"
-        fill_in "Confirmation", :with => "foobar"
+        fill_in "Name",             :with => "Example User"
+        fill_in "Email",            :with => "user@example.com"
+        fill_in "Password",         :with => "foobar"
+        fill_in "Confirm Password", :with => "foobar"
       end
 
       it "should create a user" do
