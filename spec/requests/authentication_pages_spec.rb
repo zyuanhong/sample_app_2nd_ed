@@ -70,6 +70,17 @@ describe "Authentication" do
           it "should render the desired protected page" do
             page.should have_selector('title', :text => 'Edit user')
           end
+
+          describe "when signing in again" do
+            before do
+              click_link "Sign out"
+              sign_in user
+            end
+
+            it "should render the default (profile) page" do
+              page.should have_selector('title', :text => user.name)
+            end
+          end
         end
       end
 
