@@ -47,6 +47,12 @@ describe "User pages" do
           expect { click_link('delete') }.to change(User, :count).by(-1)
         end
         it { should_not have_link('delete', :href => user_path(admin)) }
+
+        describe "can't destroy admin" do
+          before { delete user_path(admin) }
+          specify { response.should redirect_to(users_path),
+                    flash[:error].should =~ /Suicide is immoral!/i }
+        end
       end
     end
   end
