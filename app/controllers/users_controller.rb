@@ -70,6 +70,6 @@ class UsersController < ApplicationController
     end
 
     def already_login
-      redirect_to root_url, :notice => "Already login." if signed_in?
+      redirect_to root_url, :notice => "Already logged in." if signed_in?
     end
 end
